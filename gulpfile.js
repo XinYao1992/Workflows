@@ -44,3 +44,9 @@ gulp.task("compass", async function() {
 });
 
 gulp.task("default", gulp.series(["coffee", "js", "compass"])); // do all tasks in sequence
+
+gulp.task("watch", function() {
+    gulp.watch(coffeeSources, gulp.series("coffee"));// when any of these coffee files change, then we run coffee task
+    gulp.watch(jsSources, gulp.series("js"));
+    gulp.watch("components/sass/*.scss", gulp.series("compass"));
+});// will monitor and update things when they change.
