@@ -38,7 +38,9 @@ gulp.task("compass", async function() {
                 sass: "components/sass", // where the sass directory is
                 image: "builds/development/images", // image directory
                 style: "expanded" // for more information, please check sass output style
-            }))
-            .on("error", gUtil.log)
+            })
+            .on("error", gUtil.log))
         .pipe(gulp.dest("builds/development/css"))
 });
+
+gulp.task("default", gulp.series(["coffee", "js", "compass"])); // do all tasks in sequence
