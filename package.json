@@ -8,10 +8,19 @@
   },
   "author": "Xin Yao",
   "license": "ISC",
+  "scripts": {
+    "build": "npm build",
+    "clean": "rm -rf node_modules",
+    "reinstall": "npm run clean && npm install",
+    "rebuild": "npm run clean && npm install && npm run build"
+  },
   "devDependencies": {
     "gulp": "^4.0.2",
+    "gulp-browserify": "^0.5.1",
     "gulp-coffee": "^3.0.3",
     "gulp-concat": "^2.6.1",
-    "gulp-util": "^3.0.8"
+    "gulp-util": "^3.0.8",
+    "jquery": "^3.4.1",
+    "mustache": "^3.1.0"
   }
 }
