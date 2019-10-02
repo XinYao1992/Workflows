@@ -6,3 +6,4 @@ Technology stack:
 jQuery: to take care of JSON importing
 Mustache.js: to take care of JavaScript templating
 browserify: adding plugins and dependencies
+Compass
