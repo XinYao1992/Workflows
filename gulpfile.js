@@ -43,7 +43,7 @@ gulp.task("compass", async function() {
         .pipe(gulp.dest("builds/development/css"))
 });
 
-gulp.task("default", gulp.series(["coffee", "js", "compass"])); // do all tasks in sequence
+gulp.task("default", gulp.series(["coffee", "js", "compass", "watch"])); // do all tasks in sequence
 
 gulp.task("watch", function() {
     gulp.watch(coffeeSources, gulp.series("coffee"));// when any of these coffee files change, then we run coffee task
