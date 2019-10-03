@@ -14,6 +14,8 @@ var jsSources = [
     "components/scripts/pixgrid.js"
 ];
 var sassSources = ["components/sass/style.scss"];
+var htmlSources = ["builds/development/*.html"];
+var jsonSources = ["builds/development/js/*.json"];
 
 gulp.task("log", async function() {
     gUtil.log("Workflows are awesome!");
@@ -46,10 +48,12 @@ gulp.task("compass", async function() {
         .pipe(connect.reload());
 });
 
-gulp.task("watch", function() {
+gulp.task("watch", async function() {
     gulp.watch(coffeeSources, gulp.series("coffee"));// when any of these coffee files change, then we run coffee task
     gulp.watch(jsSources, gulp.series("js"));
     gulp.watch("components/sass/*.scss", gulp.series("compass"));
+    gulp.watch(htmlSources, gulp.series("html"));
+    gulp.watch(jsonSources, gulp.series("json"));
 });// will monitor and update things when they change.
 
 gulp.task("connect", async function() {// it must be async
@@ -59,4 +63,14 @@ gulp.task("connect", async function() {// it must be async
     });
 });
 
-gulp.task("default", gulp.series(["coffee", "js", "compass", "connect", "watch"])); // do all tasks in sequence
+gulp.task("html" , async function() {
+    gulp.src(htmlSources)
+        .pipe(connect.reload());
+});
+
+gulp.task("json" , async function() {
+    gulp.src(jsonSources)
+        .pipe(connect.reload());
+});
+
+gulp.task("default", gulp.series(["html", "json", "coffee", "js", "compass", "connect", "watch"])); // do all tasks in sequence
