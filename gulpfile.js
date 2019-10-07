@@ -8,6 +8,7 @@ var connect = require("gulp-connect");
 var env = process.env.NODE_ENV || "development"; // environment variables: https://nodejs.org/docs/latest/api/process.html#process_process_env
 var gulpif = require("gulp-if");
 var uglify = require("gulp-uglify");
+var minifyHTML = require("gulp-minify-html");
 var outputDir, sassStyle;
 
 if (env === "development") {
@@ -66,7 +67,7 @@ gulp.task("watch", async function() {
     gulp.watch(coffeeSources, gulp.series("coffee"));// when any of these coffee files change, then we run coffee task
     gulp.watch(jsSources, gulp.series("js"));
     gulp.watch("components/sass/*.scss", gulp.series("compass"));
-    gulp.watch(htmlSources, gulp.series("html"));
+    gulp.watch("builds/development/*.html", gulp.series("html"));
     gulp.watch(jsonSources, gulp.series("json"));
 });// will monitor and update things when they change.
 
@@ -78,7 +79,9 @@ gulp.task("connect", async function() {// it must be async
 });
 
 gulp.task("html" , async function() {
-    gulp.src(htmlSources)
+    gulp.src("builds/development/*.html")
+        .pipe(gulpif(env === "production", minifyHTML()))
+        .pipe(gulpif(env === "production", gulp.dest(outputDir)))
         .pipe(connect.reload());
 });
 
