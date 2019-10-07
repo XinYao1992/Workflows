@@ -56,7 +56,7 @@ gulp.task("compass", async function() {
     gulp.src(sassSources)
         .pipe(compass({
                 sass: "components/sass", // where the sass directory is
-                image: "builds/development/images", // image directory
+                image: outputDir + "/images", // image directory
                 style: sassStyle // for more information, please check sass output style
             })
             .on("error", gUtil.log))
@@ -70,6 +70,7 @@ gulp.task("watch", async function() {
     gulp.watch("components/sass/*.scss", gulp.series("compass"));
     gulp.watch("builds/development/*.html", gulp.series("html"));
     gulp.watch("builds/development/js/*.json", gulp.series("json"));
+    gulp.watch("builds/development/images/**/*.*", gulp.series("image"));
 });// will monitor and update things when they change.
 
 gulp.task("connect", async function() {// it must be async
@@ -93,4 +94,10 @@ gulp.task("json" , async function() {
         .pipe(connect.reload());
 });
 
-gulp.task("default", gulp.series(["html", "json", "coffee", "js", "compass", "connect", "watch"])); // do all tasks in sequence
+gulp.task("image", async function() {
+    gulp.src("builds/development/images/**/*.*")
+        .pipe(gulp.dest(outputDir + "/images"))
+        .pipe(connect.reload())
+});
+
+gulp.task("default", gulp.series(["html", "json", "coffee", "js", "compass", "image", "connect", "watch"])); // do all tasks in sequence
