@@ -6,6 +6,8 @@ var browserify = require("gulp-browserify");
 var compass = require("gulp-compass");
 var connect = require("gulp-connect");
 var env = process.env.NODE_ENV || "development"; // environment variables: https://nodejs.org/docs/latest/api/process.html#process_process_env
+var gulpif = require("gulp-if");
+var uglify = require("gulp-uglify");
 var outputDir, sassStyle;
 
 if (env === "development") {
@@ -43,6 +45,7 @@ gulp.task("js", async function() {
     gulp.src(jsSources)
         .pipe(gConcat("script.js"))
         .pipe(browserify())// adding all plugins and dependencies, such as jquery and mustache, into application
+        // .pipe(gulpif(env === "production", uglify()))
         .pipe(gulp.dest(outputDir + "/js"))
         .pipe(connect.reload());
 });
