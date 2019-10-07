@@ -5,6 +5,17 @@ var gConcat = require("gulp-concat");
 var browserify = require("gulp-browserify");
 var compass = require("gulp-compass");
 var connect = require("gulp-connect");
+var env = process.env.NODE_ENV || "development"; // environment variables: https://nodejs.org/docs/latest/api/process.html#process_process_env
+var outputDir, sassStyle;
+
+if (env === "development") {
+    outputDir = "builds/development";
+    sassStyle = "expanded";
+} else {
+    outputDir = "builds/production";
+    sassStyle = "compressed";
+}
+
 
 var coffeeSources = ["components/coffee/*.coffee"];
 var jsSources = [
@@ -14,8 +25,8 @@ var jsSources = [
     "components/scripts/pixgrid.js"
 ];
 var sassSources = ["components/sass/style.scss"];
-var htmlSources = ["builds/development/*.html"];
-var jsonSources = ["builds/development/js/*.json"];
+var htmlSources = [outputDir + "/*.html"];
+var jsonSources = [outputDir + "/js/*.json"];
 
 gulp.task("log", async function() {
     gUtil.log("Workflows are awesome!");
@@ -32,7 +43,7 @@ gulp.task("js", async function() {
     gulp.src(jsSources)
         .pipe(gConcat("script.js"))
         .pipe(browserify())// adding all plugins and dependencies, such as jquery and mustache, into application
-        .pipe(gulp.dest("builds/development/js"))
+        .pipe(gulp.dest(outputDir + "/js"))
         .pipe(connect.reload());
 });
 
@@ -40,11 +51,11 @@ gulp.task("compass", async function() {
     gulp.src(sassSources)
         .pipe(compass({
                 sass: "components/sass", // where the sass directory is
-                image: "builds/development/images", // image directory
-                style: "expanded" // for more information, please check sass output style
+                image: outputDir + "/images", // image directory
+                style: sassStyle // for more information, please check sass output style
             })
             .on("error", gUtil.log))
-        .pipe(gulp.dest("builds/development/css"))
+        .pipe(gulp.dest(outputDir + "/css"))
         .pipe(connect.reload());
 });
 
@@ -58,7 +69,7 @@ gulp.task("watch", async function() {
 
 gulp.task("connect", async function() {// it must be async
     connect.server({
-        root: "builds/development/", // define the root of our server
+        root: outputDir, // define the root of our server
         livereload: true
     });
 });
