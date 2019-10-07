@@ -9,6 +9,7 @@ var env = process.env.NODE_ENV || "development"; // environment variables: https
 var gulpif = require("gulp-if");
 var uglify = require("gulp-uglify");
 var minifyHTML = require("gulp-minify-html");
+var jsonMinify = require("gulp-jsonminify");
 var outputDir, sassStyle;
 
 if (env === "development") {
@@ -55,7 +56,7 @@ gulp.task("compass", async function() {
     gulp.src(sassSources)
         .pipe(compass({
                 sass: "components/sass", // where the sass directory is
-                image: outputDir + "/images", // image directory
+                image: "builds/development/images", // image directory
                 style: sassStyle // for more information, please check sass output style
             })
             .on("error", gUtil.log))
@@ -68,7 +69,7 @@ gulp.task("watch", async function() {
     gulp.watch(jsSources, gulp.series("js"));
     gulp.watch("components/sass/*.scss", gulp.series("compass"));
     gulp.watch("builds/development/*.html", gulp.series("html"));
-    gulp.watch(jsonSources, gulp.series("json"));
+    gulp.watch("builds/development/js/*.json", gulp.series("json"));
 });// will monitor and update things when they change.
 
 gulp.task("connect", async function() {// it must be async
@@ -86,7 +87,9 @@ gulp.task("html" , async function() {
 });
 
 gulp.task("json" , async function() {
-    gulp.src(jsonSources)
+    gulp.src("builds/development/js/*.json")
+        .pipe(gulpif(env === "production", jsonMinify()))
+        .pipe(gulpif(env === "production", gulp.dest(outputDir + "/js")))
         .pipe(connect.reload());
 });
 
