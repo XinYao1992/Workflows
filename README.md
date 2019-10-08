@@ -1,4 +1,4 @@
-# Workflows Course
+# Workflows Demo
 
 This project is a practice of workflow management using `gulp`.
 
