@@ -1,9 +1,9 @@
 # Workflows Course
 
-This project is an example of workflow management for a lynda.com course.
+This project is a practice of workflow management using `gulp`.
 
 Technology stack: 
-jQuery: to take care of JSON importing
-Mustache.js: to take care of JavaScript templating
-browserify: adding plugins and dependencies
-Compass
+- `gulp`
+- `node.js`
+- `coffeeScript`
+- `scss`
